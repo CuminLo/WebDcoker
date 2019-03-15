@@ -1,0 +1,45 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - "./nginx/conf.d:/etc/nginx/conf.d"
+      - "${HOME}/Documents/Sites:/sites:rw"
+    ports:
+      - "80:80"
+    networks:
+      - web
+    depends_on:
+      - php
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    image: wephp:latest
+    volumes:
+      - "${HOME}/Documents/Sites:/sites:rw"
+      - "./php/php.ini-development:/usr/local/etc/php/php.ini"
+      - "./php/script.sh:/usr/bin/script.sh"
+      - "./php/root:/etc/crontabs/root"
+    environment:
+      XDEBUG_CONFIG: "remote_port=9000"
+    networks:
+      - web
+    dns:
+      - 192.168.85.207
+  redis:
+    image: redis:alpine
+    expose:
+      - "6379"
+    ports:
+        - "6378:6379"
+    networks:
+      - web
+  beanstalk:
+    image: schickling/beanstalkd
+    ports:
+        - "11300:11300"
+    networks:
+      - web
+networks:
+  web:

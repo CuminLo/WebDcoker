@@ -1,0 +1,34 @@
+version: "3"
+services:
+  php:
+    image: devphp:latest
+    volumes:
+      - "${HOME}/Documents/Sites:/app:rw"
+      - "./php/php.ini-development:/etc/php7/php.ini"
+      - "./php/php-fpm/docker.conf:/etc/php7/php-fpm.d/docker.conf"
+      - "./php/php-fpm/zz-docker.conf:/etc/php7/php-fpm.d/zz-docker.conf"
+    networks:
+      - web
+    dns:
+      - 192.168.85.207
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - "./nginx/conf.d:/etc/nginx/conf.d"
+      - "${HOME}/Documents/Sites:/app:rw"
+    ports:
+      - "80:80"
+    networks:
+      - web
+    depends_on:
+      - php
+  redis:
+    image: redis:alpine
+    networks:
+      - web
+  beanstalk:
+    image: schickling/beanstalkd
+    networks:
+      - web
+networks:
+  web:
