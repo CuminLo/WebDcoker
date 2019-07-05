@@ -14,7 +14,7 @@ ENV PHPIZE_DEPS \
 		re2c
 
 ENV WORK_DIR="/app" \
-    COMPOSER_MIRROR="https://packagist.laravel-china.org" \
+    COMPOSER_MIRROR="https://mirrors.aliyun.com/composer" \
 	PHP_FPM_USER="www-data"
 
 RUN set -ex; \
