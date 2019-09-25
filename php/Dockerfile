@@ -33,6 +33,7 @@ RUN set -ex; \
     imagemagick-dev \
     openssl-dev \
     php7 \
+    php7-phalcon \
     php7-dev \
     php7-pear \
     php7-phar \
@@ -66,7 +67,6 @@ RUN set -ex; \
     php7-pecl-igbinary \
     php7-pecl-redis \
     php7-pecl-msgpack \
-    php7-pecl-mongodb \
     php7-pecl-memcached \
     php7-session \
     php7-soap \
@@ -84,10 +84,11 @@ RUN set -ex; \
 	php7-xmlwriter \
 	composer \
 && pecl channel-update pecl.php.net \
+&& pecl install protobuf && echo "extension=protobuf.so" >> /etc/php7/conf.d/protobuf.ini \
 && pecl install yar && echo "extension=yar.so" >> /etc/php7/conf.d/yar.ini \
 && pecl install swoole && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
 && composer config -g repo.packagist composer ${COMPOSER_MIRROR} \
-&& apk del $PHPIZE_DEPS php7-dev \
+## && apk del $PHPIZE_DEPS php7-dev \
 && addgroup -g 1000 -S ${PHP_FPM_USER} \
 && adduser -u 1000 -D -S -s /sbin/nologin -G ${PHP_FPM_USER} ${PHP_FPM_USER} \
 && rm -rf /var/cache/apk/* /tmp/* /var/tmp \
