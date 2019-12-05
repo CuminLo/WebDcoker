@@ -63,7 +63,6 @@ RUN set -ex; \
     php7-pdo_sqlite \
     php7-pgsql \
     php7-posix \
-    php7-pecl-event \
     php7-pecl-igbinary \
     php7-pecl-redis \
     php7-pecl-msgpack \
