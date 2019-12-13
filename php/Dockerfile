@@ -14,6 +14,7 @@ ENV PHPIZE_DEPS \
 		re2c
 
 ENV WORK_DIR="/app" \
+    ENVIRON="develop"\
     COMPOSER_MIRROR="https://mirrors.aliyun.com/composer" \
 	PHP_FPM_USER="www-data"
 
