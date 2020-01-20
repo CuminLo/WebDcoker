@@ -1906,6 +1906,8 @@ ldap.max_links = -1
 ; SSL stream context option.
 ;openssl.capath=
 
+swoole.use_shortname = off
+
 ; Local Variables:
 ; tab-width: 4
 ; End:

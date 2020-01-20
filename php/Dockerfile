@@ -33,6 +33,8 @@ RUN set -ex; \
     geoip-dev \
     imagemagick-dev \
     openssl-dev \
+    bash \
+    protobuf \
     php7 \
     php7-phalcon \
     php7-dev \
