@@ -28,6 +28,7 @@ RUN set -ex; \
     curl-dev \
     libwebp \
     libwebp-dev \
+    busybox-extras \
     libmemcached-dev \
     zlib-dev \
     geoip-dev \
