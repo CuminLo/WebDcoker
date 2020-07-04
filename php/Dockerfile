@@ -26,6 +26,8 @@ RUN set -ex; \
     acl \
     ca-certificates \
     curl-dev \
+    curl \
+    busybox-extras \
     libwebp \
     libwebp-dev \
     busybox-extras \
@@ -35,6 +37,7 @@ RUN set -ex; \
     imagemagick-dev \
     openssl-dev \
     bash \
+    vim \
     protobuf \
     php7 \
     php7-phalcon \

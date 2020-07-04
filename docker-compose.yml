@@ -7,6 +7,9 @@ services:
       - "./php/php.ini-development:/etc/php7/php.ini"
       - "./php/php-fpm/docker.conf:/etc/php7/php-fpm.d/docker.conf"
       - "./php/php-fpm/zz-docker.conf:/etc/php7/php-fpm.d/zz-docker.conf"
+    ports:
+      - "6500:6000"
+      - "20070:20070"
     networks:
       - web
   nginx:
