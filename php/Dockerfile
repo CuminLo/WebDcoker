@@ -27,6 +27,14 @@ RUN set -ex; \
     ca-certificates \
     curl-dev \
     curl \
+    strace \
+    ltrace \
+    gdb \
+    lsof \
+    iotop \
+    iftop \
+    atop \
+    htop \
     busybox-extras \
     libwebp \
     libwebp-dev \
@@ -91,8 +99,8 @@ RUN set -ex; \
 	composer \
 && pecl channel-update pecl.php.net \
 && pecl install protobuf && echo "extension=protobuf.so" >> /etc/php7/conf.d/protobuf.ini \
-&& pecl install yar && echo "extension=yar.so" >> /etc/php7/conf.d/yar.ini \
 && pecl install swoole && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
+## && pecl install yar && echo "extension=yar.so" >> /etc/php7/conf.d/yar.ini \
 && composer config -g repo.packagist composer ${COMPOSER_MIRROR} \
 ## && apk del $PHPIZE_DEPS php7-dev \
 && addgroup -g 1000 -S ${PHP_FPM_USER} \

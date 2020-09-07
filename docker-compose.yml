@@ -2,6 +2,8 @@ version: "3"
 services:
   php:
     image: wephp:latest
+    cap_add:
+      - SYS_PTRACE
     volumes:
       - "${HOME}/Documents/app:/app:rw"
       - "./php/php.ini-development:/etc/php7/php.ini"
@@ -14,6 +16,8 @@ services:
       - web
   nginx:
     image: nginx:alpine
+    cap_add:
+      - SYS_PTRACE
     volumes:
       - "./nginx/conf.d:/etc/nginx/conf.d"
       - "${HOME}/Documents/app:/app:rw"
@@ -25,6 +29,9 @@ services:
       - php
   redis:
     image: redis:alpine
+    privileged: true
+    ports:
+      - "6379:6379"
     networks:
       - web
 networks:
