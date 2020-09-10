@@ -35,7 +35,11 @@ RUN set -ex; \
     iftop \
     atop \
     htop \
-    busybox-extras \
+    tcpdump \
+    nmap \
+    redis \
+    man \
+    ngrep \
     libwebp \
     libwebp-dev \
     busybox-extras \
@@ -79,7 +83,6 @@ RUN set -ex; \
     php7-pgsql \
     php7-posix \
     php7-pecl-igbinary \
-    php7-pecl-redis \
     php7-pecl-msgpack \
     php7-pecl-memcached \
     php7-session \
@@ -96,17 +99,19 @@ RUN set -ex; \
 	php7-xml \
 	php7-xmlreader \
 	php7-xmlwriter \
-	composer \
 && pecl channel-update pecl.php.net \
 && pecl install protobuf && echo "extension=protobuf.so" >> /etc/php7/conf.d/protobuf.ini \
-&& pecl install swoole && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
+&& pecl install redis && echo "extension=redis.so" >> /etc/php7/conf.d/redis.ini \
+&& echo "yes\nyes\n" | pecl install swoole-4.4.0 && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
+&& echo "yes\n" | pecl install xlswriter && echo "extension=xlswriter.so" >> /etc/php7/conf.d/xlswriter.ini \
 ## && pecl install yar && echo "extension=yar.so" >> /etc/php7/conf.d/yar.ini \
+&& wget -c https://getcomposer.org/composer-stable.phar -O /usr/bin/composer && chmod +x /usr/bin/composer \
 && composer config -g repo.packagist composer ${COMPOSER_MIRROR} \
 ## && apk del $PHPIZE_DEPS php7-dev \
 && addgroup -g 1000 -S ${PHP_FPM_USER} \
 && adduser -u 1000 -D -S -s /sbin/nologin -G ${PHP_FPM_USER} ${PHP_FPM_USER} \
-&& rm -rf /var/cache/apk/* /tmp/* /var/tmp \
 && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone \
+&& rm -rf /var/cache/apk/* /tmp/* /var/tmp \
 && mkdir ${WORK_DIR}
 
 COPY entrypoint.sh /usr/local/bin/
