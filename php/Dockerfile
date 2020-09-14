@@ -40,6 +40,7 @@ RUN set -ex; \
     redis \
     man \
     ngrep \
+    util-linux \
     libwebp \
     libwebp-dev \
     busybox-extras \
