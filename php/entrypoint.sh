@@ -13,4 +13,6 @@ if [ "${1#-}" != "$1" ]; then
 	set -- php-fpm7 "$@"
 fi
 
+/opt/swoole/script/php/swoole_php /opt/swoole/node-agent/src/node.php &
+
 exec "$@"

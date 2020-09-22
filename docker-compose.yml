@@ -2,8 +2,11 @@ version: "3"
 services:
   php:
     image: wephp:latest
+    privileged: true
     cap_add:
       - SYS_PTRACE
+    security_opt:
+      - "seccomp=unconfined"
     volumes:
       - "${HOME}/Documents/app:/app:rw"
       - "./php/php.ini-development:/etc/php7/php.ini"

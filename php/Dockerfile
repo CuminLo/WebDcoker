@@ -14,7 +14,7 @@ ENV PHPIZE_DEPS \
 		re2c
 
 ENV WORK_DIR="/app" \
-    ENVIRON="develop"\
+    ENVIRON="develop" \
     COMPOSER_MIRROR="https://mirrors.aliyun.com/composer" \
 	PHP_FPM_USER="www-data"
 
@@ -39,6 +39,9 @@ RUN set -ex; \
     nmap \
     redis \
     man \
+    git \
+    go \
+    lua \
     ngrep \
     util-linux \
     libwebp \
@@ -103,23 +106,31 @@ RUN set -ex; \
 && pecl channel-update pecl.php.net \
 && pecl install protobuf && echo "extension=protobuf.so" >> /etc/php7/conf.d/protobuf.ini \
 && pecl install redis && echo "extension=redis.so" >> /etc/php7/conf.d/redis.ini \
-&& echo "yes\nyes\n" | pecl install swoole-4.4.0 && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
-&& echo "yes\n" | pecl install xlswriter && echo "extension=xlswriter.so" >> /etc/php7/conf.d/xlswriter.ini \
 ## && pecl install yar && echo "extension=yar.so" >> /etc/php7/conf.d/yar.ini \
+&& echo "yes\n" | pecl install xlswriter && echo "extension=xlswriter.so" >> /etc/php7/conf.d/xlswriter.ini \
+&& echo "yes\nyes\n" | pecl install swoole-4.4.0 && echo "extension=swoole.so" >> /etc/php7/conf.d/swoole.ini \
 && wget -c https://getcomposer.org/composer-stable.phar -O /usr/bin/composer && chmod +x /usr/bin/composer \
 && composer config -g repo.packagist composer ${COMPOSER_MIRROR} \
 ## && apk del $PHPIZE_DEPS php7-dev \
 && addgroup -g 1000 -S ${PHP_FPM_USER} \
 && adduser -u 1000 -D -S -s /sbin/nologin -G ${PHP_FPM_USER} ${PHP_FPM_USER} \
 && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo "Asia/Shanghai" > /etc/timezone \
-&& rm -rf /var/cache/apk/* /tmp/* /var/tmp \
-&& mkdir ${WORK_DIR}
+&& rm -rf /var/cache/apk/* /tmp/* /var/tmp
+
+ADD swoole-tracker-install.sh /tmp/
+RUN chmod +x /tmp/swoole-tracker-install.sh && \
+    cd /tmp/ && \
+    ./swoole-tracker-install.sh && \
+    rm /tmp/swoole-tracker-install.sh
+
+RUN printf 'extension=/tmp/swoole-tracker/swoole_tracker73.so\napm.enable=1\napm.sampling_rate=100\napm.enable_memcheck=1' > /etc/php7/conf.d/swoole-tracker.ini
 
 COPY entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["entrypoint.sh"]
 
 WORKDIR ${WORK_DIR}
 
 EXPOSE 9000
+
+ENTRYPOINT ["entrypoint.sh"]
 
 CMD ["php-fpm7", "-F"]
